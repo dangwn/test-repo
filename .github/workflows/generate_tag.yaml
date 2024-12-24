@@ -98,6 +98,7 @@ jobs:
         run: |
           # Get the latest commit message
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          echo "$COMMIT_MESSAGE"
           
           # Check if the commit message matches the regex
           if [[ "$COMMIT_MESSAGE" =~ "Update version.txt to v.*" ]]; then
