@@ -105,6 +105,7 @@ jobs:
             echo "skip=1" >> $GITHUB_OUTPUT
           else
             echo "skip=0" >> $GITHUB_OUTPUT
+          fi
 
   create-tag:
     runs-on: ubuntu-latest
