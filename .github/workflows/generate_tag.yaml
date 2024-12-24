@@ -117,8 +117,6 @@ jobs:
     steps:
       - name: Create tag
         uses: actions/github-script@v5
-        env:
-          github_token:  ${{ secrets.PAT }}
         with:
           script: |
             github.rest.git.createRef({
