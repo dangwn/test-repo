@@ -115,14 +115,32 @@ jobs:
           git push
           echo "Version file: $(cat ${{ env.VERSION_FILE }})"
 
-  create-tag:
+  create-tag-from-supplied-version:
+    runs-on: ubuntu-latest
+    needs:
+      - generate-version-number
+    if: |
+      (needs.generate-version-number.outputs.new_version_created == 0)
+    steps:
+      - name: Create tag
+        uses: actions/github-script@v5
+        env:
+          github_token:  ${{ secrets.PAT }}
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ needs.generate-version-number.outputs.tag_version }}',
+              sha: context.sha
+            })
+
+  create-tag-from-new-version:
     runs-on: ubuntu-latest
     needs:
       - check-commit-message
-      - generate-version-number
     if: |
       (needs.check-commit-message.outputs.action_type == 2) ||
-        (needs.generate-version-number.outputs.new_version_created == 0)
     steps:
       - name: Create tag
         uses: actions/github-script@v5
