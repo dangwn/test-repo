@@ -37,7 +37,7 @@ jobs:
     needs:
       - check-commit-message
     if: |
-      needs.check-commit-message.outputs.action_type == 1
+      needs.check-commit-message.outputs.action_type == 2
     outputs:
       tag_version: ${{ steps.calculate_tag.outputs.tag_version }}
       new_version_created: ${{ steps.calculate_tag.outputs.new_version_created }}
@@ -54,7 +54,7 @@ jobs:
           if [ -f ${{ env.VERSION_FILE }} ]; then
             version=$(cat ${{ env.VERSION_FILE }})
           else
-            version="v0.0.0"
+            version="v0.0.1"
           fi
           echo "Current version: $version"
           echo "current_version=$version" >> $GITHUB_ENV
@@ -140,8 +140,24 @@ jobs:
     needs:
       - check-commit-message
     if: |
-      (needs.check-commit-message.outputs.action_type == 2)
+      (needs.check-commit-message.outputs.action_type == 1)
+    env:
+      VERSION_FILE: .github/workflows/version.txt
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Read version from ${{ env.VERSION_FILE }}
+        id: read_version
+        run: |
+          if [ -f ${{ env.VERSION_FILE }} ]; then
+            version=$(cat ${{ env.VERSION_FILE }})
+          else
+            version="v0.0.1"
+          fi
+          echo "Current version: $version"
+          echo "current_version=$version" >> $GITHUB_ENV
       - name: Create tag
         uses: actions/github-script@v5
         env:
