@@ -140,7 +140,7 @@ jobs:
     needs:
       - check-commit-message
     if: |
-      (needs.check-commit-message.outputs.action_type == 2) ||
+      (needs.check-commit-message.outputs.action_type == 2)
     steps:
       - name: Create tag
         uses: actions/github-script@v5
