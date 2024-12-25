@@ -25,9 +25,11 @@ jobs:
           COMMIT_MESSAGE_MATCH="Update Version to v.*"
 
           if [[ $COMMIT_MESSAGE =~ $COMMIT_MESSAGE_MATCH ]]; then
-            echo "action_type=1" >> $GITHUB_OUTPUT
-          else
             echo "action_type=2" >> $GITHUB_OUTPUT
+            echo "Updating version file and pushing to master"
+          else
+            echo "action_type=1" >> $GITHUB_OUTPUT
+            echo "Generating tags"
           fi
 
   generate-version-number:
